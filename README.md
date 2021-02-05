@@ -2,7 +2,8 @@
  TODO
  - Implement stock cards [X] -- More styling required, but basic layout is in place
  - Setup Page for cards [X] -- No seperate file for the moment, just a seperate Widget
- - Implement networking []
+ - Implement networking [X]
+     - Networking needs to be refactored and have funtionality added for more stocks []. (Find a suitable API)
  - Retrieve data []
  - Implement data mangagement []
  - Implement search function []
