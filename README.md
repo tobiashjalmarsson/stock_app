@@ -1,2 +1,6 @@
 # stock_app
- Visualize stock data
+ TODO
+ - Implement stock cards []
+ - Setup Page for cards []
+ - Implement search function []
+ - Retrieve data []
