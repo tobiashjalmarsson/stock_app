@@ -88,7 +88,15 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(
                 height: 10,
               ),
-              StockRow(company: "Amazon",dailyChange: 3.4, yearlyChange: 10.7),
+              StockRow(company: "Amazon",dailyChange: -1.4, yearlyChange: 10.7),
+              SizedBox(
+                height: 10,
+              ),
+              StockRow(company: "Bitcoin",dailyChange: -4.0, yearlyChange: -31.2),
+              SizedBox(
+                height: 10,
+              ),
+              StockRow(company: "Etherium",dailyChange: -3.2, yearlyChange: -40.1),
             ],
           ),
         ),
@@ -100,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
 
-class StockRow extends StatelessWidget {
+class StockRow extends StatefulWidget {
   const StockRow({
     Key key,
     @required this.company,
@@ -112,8 +120,23 @@ class StockRow extends StatelessWidget {
   final double dailyChange;
   final double yearlyChange;
 
+
+
+  @override
+  _StockRowState createState() => _StockRowState();
+}
+
+class _StockRowState extends State<StockRow> {
   @override
   Widget build(BuildContext context) {
+    Color getColor(double change){
+        if(change < 0){
+          return Colors.redAccent;
+        }
+        else {
+          return Colors.green;
+        }
+    }
     return Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -133,27 +156,31 @@ class StockRow extends StatelessWidget {
             children: <Widget> [
 
               Text(
-                "$company",
+                "${widget.company}",
                 style: TextStyle(
                     color: Colors.blueAccent,
                     fontSize: 25,
                     fontWeight: FontWeight.w500
                 ),
               ),
-
+              SizedBox(
+                width: 65,
+              ),
               Text(
-                "1d: $dailyChange%",
+                "1d: ${widget.dailyChange}%",
                 style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: getColor(widget.dailyChange)
                 ),
               ),
 
               Text(
-                "12m: $yearlyChange%",
+                "12m: ${widget.yearlyChange}%",
                 style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: getColor(widget.yearlyChange)
                 ),
               ),
             ]
