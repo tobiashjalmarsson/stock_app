@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(MyApp());
@@ -12,6 +15,26 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
+  void initState(){
+    print("test");
+    super.initState();
+    getStockData();
+  }
+
+  // This function should be moved to the networking_helper
+  Future<void> getStockData() async{
+    print("Starting fetch");
+    var url = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH&tsyms=USD';
+    var response = await http.get(url);
+    // Now decode the data
+    var decodedResponse = jsonDecode(response.body);
+    // Now split the data into BTC and ETC
+    var btc = decodedResponse['BTC']['USD'];
+    var eth = decodedResponse['ETH']['USD'];
+    print("BTC: $btc, ETH: $eth");
+    print("Fetch complete");
+
+  }
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
@@ -61,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
   double dailyChange = 1.24;
   double yearlyChange = 34.2;
   @override
+
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
