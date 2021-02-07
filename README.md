@@ -1,6 +1,6 @@
 # stock_app
- Description
- Mobile application being developed in Flutter to visualise data from a seperate repo.
+ DESCRIPTION
+ - Mobile application being developed in Flutter to visualise data from a seperate repo.
  
  TODO
  - Implement stock cards [X] -- More styling required, but basic layout is in place
