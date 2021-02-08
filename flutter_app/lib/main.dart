@@ -1,22 +1,25 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import './API/market.dart';
+import './API/stock.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  // This widget is the root of your application.
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+  //Market market;
   @override
   void initState(){
     print("test");
+    //market = Market();
+    //market.populateMarket();
     super.initState();
     getStockData();
   }
@@ -35,6 +38,8 @@ class _MyAppState extends State<MyApp> {
     print("Fetch complete");
 
   }
+
+
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
@@ -64,18 +69,9 @@ class _MyAppState extends State<MyApp> {
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
-  @override
+
   _MyHomePageState createState() => _MyHomePageState();
 }
 
@@ -83,19 +79,25 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   double dailyChange = 1.24;
   double yearlyChange = 34.2;
+  Market market = Market();
+
+  List<Widget> getMarketList(Market market){
+    List<Stock> stocks = market.getStocks();
+    List<Widget> stockWidgets = [];
+    for (Stock st in stocks){
+      StockRow current = StockRow(company: st.name, dailyChange: st.dChange, yearlyChange: st.yChange);
+      stockWidgets.add(current);
+      stockWidgets.add(SizedBox(height: 10));
+    }
+    return stockWidgets;
+  }
+
   @override
 
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    market.populateMarket();
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
       body: Scaffold(
@@ -103,25 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
           color: Colors.green,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              StockRow(company: "Apple" ,dailyChange: dailyChange, yearlyChange: yearlyChange),
-              SizedBox(
-                height: 10,
-              ),
-              StockRow(company: "Google",dailyChange: 3.4, yearlyChange: 10.7),
-              SizedBox(
-                height: 10,
-              ),
-              StockRow(company: "Amazon",dailyChange: -1.4, yearlyChange: 10.7),
-              SizedBox(
-                height: 10,
-              ),
-              StockRow(company: "Bitcoin",dailyChange: -4.0, yearlyChange: -31.2),
-              SizedBox(
-                height: 10,
-              ),
-              StockRow(company: "Etherium",dailyChange: -3.2, yearlyChange: -40.1),
-            ],
+            children: getMarketList(market),
           ),
         ),
       ),
@@ -212,3 +196,4 @@ class _StockRowState extends State<StockRow> {
     );
   }
 }
+
