@@ -80,11 +80,16 @@ class _MyHomePageState extends State<MyHomePage> {
   double dailyChange = 1.24;
   double yearlyChange = 34.2;
   Market market = Market();
+  List<Widget> stocks;
 
-  List<Widget> getMarketList(Market market){
-    List<Stock> stocks = market.getStocks();
+
+  List<Widget> getMarketList(Market market) {
+    market.populateMarket();
+    List<Stock> currentStocks = market.getStocks();
     List<Widget> stockWidgets = [];
-    for (Stock st in stocks){
+    stockWidgets.add(SizedBox(height: 10));
+    stocks = [];
+    for (Stock st in currentStocks){
       StockRow current = StockRow(company: st.name, dailyChange: st.dChange, yearlyChange: st.yChange);
       stockWidgets.add(current);
       stockWidgets.add(SizedBox(height: 10));
@@ -100,17 +105,18 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Scaffold(
-        body: Container(
-          color: Colors.green,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: getMarketList(market),
-          ),
-        ),
-      ),
+      body:
+            Container(
+              color: Colors.green,
+              child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: getMarketList(market),
+                    ),
+                  ),
+              ),
+        );
        // This trailing comma makes auto-formatting nicer for build methods.
-    );
   }
 }
 
