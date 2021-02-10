@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import './API/market.dart';
 import './API/stock.dart';
+import './screens/graph_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -42,6 +43,10 @@ class _MyAppState extends State<MyApp> {
 
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: '/',
+      routes: {
+        '/graphs' : (context) => GraphScreen(),
+      },
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -84,6 +89,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
   List<Widget> getMarketList(Market market) {
+    market.clearMarket();
+    print(market.getStocks());
     market.populateMarket();
     List<Stock> currentStocks = market.getStocks();
     List<Widget> stockWidgets = [];
@@ -91,7 +98,9 @@ class _MyHomePageState extends State<MyHomePage> {
     stocks = [];
     for (Stock st in currentStocks){
       StockRow current = StockRow(company: st.name, dailyChange: st.dChange, yearlyChange: st.yChange);
+      String currentName = st.name;
       stockWidgets.add(current);
+      print("Stock added $currentName");
       stockWidgets.add(SizedBox(height: 10));
     }
     return stockWidgets;
@@ -151,54 +160,60 @@ class _StockRowState extends State<StockRow> {
           return Colors.green;
         }
     }
-    return Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20),
+    return GestureDetector(
+      onTap: () {
+        print("Clicked");
+        Navigator.pushNamed(context, '/graphs');
+      },
+      child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+            ),
+            border: Border.all(
+              color: Colors.tealAccent,
+              width: 1,
+            )
           ),
-          border: Border.all(
-            color: Colors.tealAccent,
-            width: 1,
+          margin: EdgeInsets.only(left: 20.0, right: 20.0),
+          height: 45,
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget> [
+
+                Text(
+                  "${widget.company}",
+                  style: TextStyle(
+                      color: Colors.blueAccent,
+                      fontSize: 25,
+                      fontWeight: FontWeight.w500
+                  ),
+                ),
+                SizedBox(
+                  width: 65,
+                ),
+                Text(
+                  "1d: ${widget.dailyChange}%",
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: getColor(widget.dailyChange)
+                  ),
+                ),
+
+                Text(
+                  "12m: ${widget.yearlyChange}%",
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: getColor(widget.yearlyChange)
+                  ),
+                ),
+              ]
           )
-        ),
-        margin: EdgeInsets.only(left: 20.0, right: 20.0),
-        height: 45,
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget> [
-
-              Text(
-                "${widget.company}",
-                style: TextStyle(
-                    color: Colors.blueAccent,
-                    fontSize: 25,
-                    fontWeight: FontWeight.w500
-                ),
-              ),
-              SizedBox(
-                width: 65,
-              ),
-              Text(
-                "1d: ${widget.dailyChange}%",
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    color: getColor(widget.dailyChange)
-                ),
-              ),
-
-              Text(
-                "12m: ${widget.yearlyChange}%",
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    color: getColor(widget.yearlyChange)
-                ),
-              ),
-            ]
-        )
+      ),
     );
   }
 }
