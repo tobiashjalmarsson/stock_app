@@ -5,21 +5,15 @@ class GraphScreen extends StatefulWidget {
 }
 
 class _GraphScreenState extends State<GraphScreen> {
-  String cityName;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Company Name",
+        )
+      ),
       body: Container(
-        child: Column(
-          children: <Widget>[
-            Text("Graphs route"),
-            FloatingActionButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                }
-            ),
-          ],
-        ),
       ),
     );
   }

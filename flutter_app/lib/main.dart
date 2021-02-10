@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/screens/stock_screen.dart';
 import 'package:http/http.dart' as http;
 import './API/market.dart';
 import './API/stock.dart';
 import './screens/graph_screen.dart';
+import './screens/login_screen.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -45,7 +48,9 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       initialRoute: '/',
       routes: {
+        '/' : (context) => MyHomePage(),
         '/graphs' : (context) => GraphScreen(),
+        '/stocks' : (context) => StockScreen(),
       },
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -66,7 +71,7 @@ class _MyAppState extends State<MyApp> {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home:  MyHomePage(title: 'Brrrrrr'),
+      //home:  MyHomePage(title: 'Brrrrrr'),
     );
   }
 }
@@ -81,140 +86,110 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  double dailyChange = 1.24;
-  double yearlyChange = 34.2;
-  Market market = Market();
-  List<Widget> stocks;
-
-
-  List<Widget> getMarketList(Market market) {
-    market.clearMarket();
-    print(market.getStocks());
-    market.populateMarket();
-    List<Stock> currentStocks = market.getStocks();
-    List<Widget> stockWidgets = [];
-    stockWidgets.add(SizedBox(height: 10));
-    stocks = [];
-    for (Stock st in currentStocks){
-      StockRow current = StockRow(company: st.name, dailyChange: st.dChange, yearlyChange: st.yChange);
-      String currentName = st.name;
-      stockWidgets.add(current);
-      print("Stock added $currentName");
-      stockWidgets.add(SizedBox(height: 10));
-    }
-    return stockWidgets;
+  // Create controller for the text fields
+  final String myPassword = "test123";
+  final String myUsername = "tester";
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+  @override
+  // We need to clean up the controllers when the widget is disposed off.
+  void dispose(){
+    usernameController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
-  @override
+  bool checkInfo(String username, String password){
+    if((password == myPassword) && (username == myUsername)){
+      return true;
+    }
+    return false;
+  }
 
   Widget build(BuildContext context) {
-    market.populateMarket();
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        automaticallyImplyLeading: false,
+        title: Center(child: Text("Welcome")),
       ),
-      body:
-            Container(
-              color: Colors.green,
-              child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: getMarketList(market),
-                    ),
-                  ),
+      body: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              "Brrrrrr",
+              style: TextStyle(
+                fontSize: 35,
+                color: Colors.black54,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w600,
               ),
-        );
-       // This trailing comma makes auto-formatting nicer for build methods.
-  }
-}
-
-
-
-class StockRow extends StatefulWidget {
-  const StockRow({
-    Key key,
-    @required this.company,
-    @required this.dailyChange,
-    @required this.yearlyChange,
-  }) : super(key: key);
-
-  final String company;
-  final double dailyChange;
-  final double yearlyChange;
-
-
-
-  @override
-  _StockRowState createState() => _StockRowState();
-}
-
-class _StockRowState extends State<StockRow> {
-  @override
-  Widget build(BuildContext context) {
-    Color getColor(double change){
-        if(change < 0){
-          return Colors.redAccent;
-        }
-        else {
-          return Colors.green;
-        }
-    }
-    return GestureDetector(
-      onTap: () {
-        print("Clicked");
-        Navigator.pushNamed(context, '/graphs');
-      },
-      child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
             ),
-            border: Border.all(
-              color: Colors.tealAccent,
-              width: 1,
-            )
-          ),
-          margin: EdgeInsets.only(left: 20.0, right: 20.0),
-          height: 45,
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget> [
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              margin: EdgeInsetsDirectional.only(start: 20, top: 0, end: 20, bottom: 15),
+              child: TextField(
+                controller: usernameController,
+                decoration: InputDecoration(
+                  labelText: "Username",
+                  contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(32.0)),
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsetsDirectional.only(start: 20, top: 0, end: 20, bottom: 15),
+              child: TextField(
+                controller: passwordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: "Password",
+                  contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(32.0)),
+                ),
+              ),
+            ),
+            Container(
+              width: 175,
+              child: FloatingActionButton(
+                onPressed: () {
+                  String username = usernameController.text;
+                  String password = passwordController.text;
+                  if(checkInfo(username, password)){
+                    Navigator.pushNamed(context, '/stocks');
+                  }
+                  else {
+                    return showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            content: Text("username: $username, password: $password"),
+                          );
+                        }
+                    );
+                  }
 
-                Text(
-                  "${widget.company}",
-                  style: TextStyle(
-                      color: Colors.blueAccent,
-                      fontSize: 25,
-                      fontWeight: FontWeight.w500
-                  ),
+                },
+                backgroundColor: Colors.teal,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(15.0))
                 ),
-                SizedBox(
-                  width: 65,
-                ),
-                Text(
-                  "1d: ${widget.dailyChange}%",
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: getColor(widget.dailyChange)
-                  ),
+                child: Text(
+                    "Login"
                 ),
 
-                Text(
-                  "12m: ${widget.yearlyChange}%",
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: getColor(widget.yearlyChange)
-                  ),
-                ),
-              ]
-          )
+              ),
+            ),
+            SizedBox(
+              height: 60,
+            ),
+          ],
+        ),
       ),
     );
   }
 }
-
