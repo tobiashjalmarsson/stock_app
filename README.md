@@ -5,8 +5,12 @@
  TODO
  - Implement stock cards [X] -- More styling required, but basic layout is in place
  - Setup Page for cards [X] -- No seperate file for the moment, just a seperate Widget
+ - Setup basic navigation [X]
+ - Create login screen []
+ - Create Graph Screen []
  - Implement networking [X]
-     - Networking needs to be refactored and have funtionality added for more stocks []. (Find a suitable API)
+     - Change:
+        - Will implement a Django or Flask backend instead and handle the data from there []
  - Retrieve data []
  - Implement data mangagement []
  - Implement search function []
