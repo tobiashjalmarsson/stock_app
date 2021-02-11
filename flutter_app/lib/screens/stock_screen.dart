@@ -116,6 +116,7 @@ class StockRow extends StatefulWidget {
 class _StockRowState extends State<StockRow> {
   @override
   Widget build(BuildContext context) {
+    String company = widget.company; // Retrieving from widget
     Color getColor(double change){
       if(change < 0){
         return Colors.redAccent;
@@ -127,7 +128,7 @@ class _StockRowState extends State<StockRow> {
     return GestureDetector(
       onTap: () {
         print("Clicked");
-        Navigator.pushNamed(context, '/graphs');
+        Navigator.pushNamed(context, '/graphs', arguments: company);
       },
       child: Container(
           decoration: BoxDecoration(

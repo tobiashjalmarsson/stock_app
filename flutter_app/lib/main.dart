@@ -6,6 +6,7 @@ import './API/market.dart';
 import './API/stock.dart';
 import './screens/graph_screen.dart';
 import './screens/login_screen.dart';
+import './API/route_generator.dart';
 
 
 void main() {
@@ -47,11 +48,17 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute: '/',
+      onGenerateRoute: RouteGenerator.generateRoute,
+      /*
       routes: {
         '/' : (context) => MyHomePage(),
         '/graphs' : (context) => GraphScreen(),
         '/stocks' : (context) => StockScreen(),
       },
+
+       */
+      // Instead of a route map, adding a routing function to use dynamic data
+
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
