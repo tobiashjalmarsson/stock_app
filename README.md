@@ -6,7 +6,7 @@
  - Implement stock cards [X] -- More styling required, but basic layout is in place
  - Setup Page for cards [X] -- No seperate file for the moment, just a seperate Widget
  - Setup basic navigation [X]
- - Create login screen []
+ - Create login screen [X]
  - Create Graph Screen []
  - Implement networking [X]
      - Change:
