@@ -7,7 +7,8 @@
  - Setup Page for cards [X] -- No seperate file for the moment, just a seperate Widget
  - Setup basic navigation [X]
  - Create login screen [X]
- - Create Graph Screen []
+ - Create Graph Screen [X]
+     - Need to add dynamic data []
  - Implement networking [X]
      - Change:
         - Will implement a Django or Flask backend instead and handle the data from there []
